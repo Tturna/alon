@@ -26,10 +26,11 @@ Output:
 3
 */
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
-void get_valid_subset_sums(unsigned int k, const std::vector<int>& set, std::vector<long>& sums,
+void get_valid_subset_sums(unsigned int k, const std::vector<int>& set, std::vector<long long>& sums,
     std::vector<int>& selections
 ) {
     if (k == set.size()) {
@@ -72,22 +73,31 @@ int main() {
         }
     }
 
-    std::vector<long> sums1;
-    std::vector<long> sums2;
+    std::vector<long long> sums1;
+    std::vector<long long> sums2;
     std::vector<int> selections(n);
 
     get_valid_subset_sums(0, vals1, sums1, selections);
     selections = std::vector<int>(n);
     get_valid_subset_sums(0, vals2, sums2, selections);
 
-    long ans = 0;
+    // long ans = 0;
+    //
+    // for (unsigned long i = 0; i < sums1.size(); i++) {
+    //     for (unsigned long j = 0; j < sums2.size(); j++) {
+    //         if (sums1[i] == x - sums2[j]) {
+    //             ans++;
+    //         }
+    //     }
+    // }
 
-    for (unsigned long i = 0; i < sums1.size(); i++) {
-        for (unsigned long j = 0; j < sums2.size(); j++) {
-            if (sums1[i] == x - sums2[j]) {
-                ans++;
-            }
-        }
+    std::sort(sums2.begin(), sums2.end());
+
+    long long ans = 0;
+    for (auto s1 : sums1) {
+        long long target = x - s1;
+        auto range = std::equal_range(sums2.begin(), sums2.end(), target);
+        ans += range.second - range.first;
     }
 
     std::cout << ans << "\n";
