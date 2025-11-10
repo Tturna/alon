@@ -28,3 +28,49 @@ Input:
 Output:
 3
 */
+
+#include <iostream>
+#include <vector>
+
+void calculateSubtreeSizes(int currentNode, int parent, std::vector<std::vector<int>>& adjacencyTable,
+    std::vector<int>& subtreeSizes)
+{
+    for (auto neighbor : adjacencyTable[currentNode]) {
+        if (neighbor == parent) continue;
+        calculateSubtreeSizes(neighbor, currentNode, adjacencyTable, subtreeSizes);
+        subtreeSizes[currentNode] += subtreeSizes[neighbor];
+    }
+}
+
+int findCentroid(int currentNode, int parent, std::vector<std::vector<int>>& adjacencyTable,
+    std::vector<int>& subtreeSizes, int nodeCount) {
+    for (auto neighbor : adjacencyTable[currentNode]) {
+        if (neighbor == parent) continue;
+        if (subtreeSizes[neighbor] > nodeCount / 2) {
+            return findCentroid(neighbor, currentNode, adjacencyTable, subtreeSizes, nodeCount);
+        }
+    }
+
+    return currentNode;
+}
+
+int main() {
+    int nodeCount;
+
+    std::cin >> nodeCount;
+
+    std::vector<std::vector<int>> adjacencyTable(nodeCount);
+
+    for (int i = 0; i < nodeCount - 1; i++) {
+        int a, b;
+        std::cin >> a >> b;
+
+        adjacencyTable[a - 1].push_back(b - 1);
+        adjacencyTable[b - 1].push_back(a - 1);
+    }
+
+    std::vector<int> subtreeSizes(nodeCount, 1);
+    calculateSubtreeSizes(0, -1, adjacencyTable, subtreeSizes);
+    int centroid = findCentroid(0, -1, adjacencyTable, subtreeSizes, nodeCount);
+    std::cout << centroid + 1 << "\n";
+}
