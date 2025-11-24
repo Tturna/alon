@@ -38,7 +38,7 @@ Output:
 #include <algorithm>
 #include <map>
 
-class SegmentTree {
+class segmentTree {
 private:
     std::vector<int> tree;
     int size;
@@ -70,7 +70,7 @@ private:
     }
     
 public:
-    SegmentTree(int n) : size(n) {
+    segmentTree(int n) : size(n) {
         tree.assign(4 * n, 0);
     }
     
@@ -127,7 +127,7 @@ int main() {
         return ranges[i].second > ranges[j].second;
     });
     
-    SegmentTree tree1(coords.size());
+    segmentTree tree1(coords.size());
 
     for (int i = n - 1; i >= 0; i--) {
         int idx = indices[i];
@@ -146,7 +146,7 @@ int main() {
         return ranges[i].second < ranges[j].second;
     });
     
-    SegmentTree tree2(coords.size());
+    segmentTree tree2(coords.size());
 
     for (int i = n - 1; i >= 0; i--) {
         int idx = indices[i];
